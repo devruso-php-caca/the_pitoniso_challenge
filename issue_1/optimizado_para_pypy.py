@@ -61,6 +61,16 @@ def consumer(start_pos, end_pos):
         #chunk = fm.readline()
         chunk = _r()
 
+        # Podría parecer que la mejor manera de salir del bucle es comprobar si
+        # la línea que acabamos de leer contiene algo, pero no lo es. Hacer esa
+        # comprobación implica ejecutar ~(1 billón / NP) ifs, lo cual son muchas
+        # instrucciones. Es muchisimo mas óptimo rodear el código en un
+        # try/catch y salirnos del bucle cuando el código pete.
+        # Esto es así porque Python tiene "zero cost exception handling".
+        # Más info: https://bugs.python.org/issue40222
+        #if not chunk:
+        #    break
+
         # Micro-optimización: dado que estoy optimizando este código para PyPy y
         # no para CPython, puedo aprovecharme del hecho de que aquí acceder a
         # posiciones aleatorios de bytes es más rápido que generar 2 churros de
